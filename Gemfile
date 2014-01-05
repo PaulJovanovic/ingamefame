@@ -6,7 +6,7 @@ gem 'rails', '3.2.15'
 
 gem 'pg'
 
-gem 'unicorn'
+# gem 'unicorn'
 
 gem 'twitch', '= 0.0.2'
 
