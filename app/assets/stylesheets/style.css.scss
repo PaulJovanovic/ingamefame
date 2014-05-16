@@ -19,13 +19,14 @@ body {
   left: 0px;
   position: absolute;
   top: 0px;
-  width: 25%;
+  width: 300px;
 
   .container {
     background-color: inherit;
     border-right: solid 1px #111111;
     height: 100%;
     position: relative;
+    width: 100%;
 
     .top {
       background-color: inherit;
@@ -64,17 +65,24 @@ body {
         height: 100%;
         overflow-y: auto;
         overflow-x: hidden;
+        position: relative;
 
         .channel {
           background-color: #444444;
           border-bottom: solid 1px #333333;
           border-top: solid 1px #555555;
           color: #CCCCCC;
+          cursor: pointer;
           padding: 10px;
           width: 100%;
 
           &.active {
             background-color: #555555;
+            color: #FFFFFF;
+          }
+
+          &.add {
+            background-color: #00B0FF;
             color: #FFFFFF;
           }
         }
@@ -86,10 +94,10 @@ body {
 .ingamefame-tv {
   background-color: #222222;
   bottom: 0px;
+  left: 300px;
   position: absolute;
   right: 0px;
   top: 0px;
-  width: 75%;
 
   .container {
     background-color: inherit;
@@ -169,5 +177,97 @@ body {
       right: 30px;
       top: 103px;
     }
+  }
+}
+
+.form {
+
+  &.session {
+    background-color: #333333;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 100%;
+
+    &.login {
+      left: 100%;
+    }
+
+    &.signup {
+      right: 100%;
+    }
+
+    .session-wrapper {
+      padding: 10px;
+
+      .title {
+        color: #FED402;
+        font-size: 24px;
+        height: 36px;
+        text-align: center;
+        text-transform: uppercase;
+      }
+    }
+
+    .message {
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+      background-color: #b94a48;
+      border: solid 1px #eed3d7;
+      color: #f2dede;
+      display: none;
+      margin-top: 10px;
+      padding: 5px;
+      text-align: center;
+    }
+  }
+
+  input {
+    -webkit-appearance: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: solid 1px #DDDDDD;
+    height: 30px;
+    margin: 0;
+    padding: 0 10px;
+    width: 100%;
+  }
+
+  input[type=submit] {
+    border: none;
+    border-bottom-width: 2px;
+    height: 38px;
+  }
+
+  input + input {
+    margin-top: 10px;
+  }
+}
+
+.hide {
+  display: none;
+}
+
+.btn {
+  background-color: #666666;
+  border-bottom: solid 2px #444444;
+  color: #CCCCCC;
+  cursor: pointer;
+  font-family: "Helvetica";
+  font-size: 16px;
+  height: 38px;
+  line-height: 38px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 0;
+  text-align: center;
+  text-transform: uppercase;
+
+  &:hover {
+    background-color: #777777;
+    color: #DDDDDD;
   }
 }

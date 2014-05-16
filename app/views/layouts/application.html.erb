@@ -4,8 +4,13 @@
   <title>Ingamefame</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <script>
+    window.channelChanger = {};
+    window.channelChanger["newUserChannelUrl"] = "<%= new_user_channel_url %>";
+  </script>
 </head>
 <body>
   <div class="ingamefame-menu">
@@ -17,10 +22,49 @@
         <div class="logo-banner"></div>
       </div>
       <div class="bottom">
+        <div class="channel-search js-channel-search">
+          <% if signed_in? %>
+            <%= form_for([current_user, @channel = Channel.new], remote: true) do |f| %>
+              <%= f.text_field :name, placeholder: "search" %>
+            <% end %>
+          <% end %>
+        </div>
         <div class="listing js-channel-listing">
-          <% @games.each do |game| %>
-            <div class="channel js-channel<%= " active" if "Hearthstone: Heroes of Warcraft" == game["name"] %>" data-game-name="<%= game["name"] %>">
-              <%= game["name"] %>
+          <% if signed_in? %>
+            <% @channels.each do |channel| %>
+              <div class="channel js-channel<%= " active" if cookies[:channel] == channel.id %>" data-id="<%= channel.id %>">
+                <%= channel.name %>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="js-igf-session">
+              <div class="form session signup js-signup-form">
+                <div class="session-wrapper">
+                  <div class="title">signup</div>
+                  <%= form_for(@user, remote: true) do |f| %>
+                    <%= f.text_field :username, placeholder: "username" %>
+                    <%= f.password_field :password, placeholder: "password" %>
+                    <%= f.password_field :password_confirmation, placeholder: "confirm password" %>
+                    <%= f.submit "Signup", class: "btn", data: { :"disable-with" => "processing..." } %>
+                  <% end %>
+                </div>
+              </div>
+              <div class="form session login js-login-form">
+                <div class="session-wrapper">
+                  <%= form_for(resource, as: resource_name, url: session_path(@user), remote: true) do |f| %>
+                    <%= f.text_field :username, placeholder: "username" %>
+                    <%= f.password_field :password, placeholder: "password" %>
+                    <%= f.submit "Login", class: "btn", data: { :"disable-with" => "processing..." } %>
+                  <% end %>
+                  <div class="message js-session-message"></div>
+                </div>
+              </div>
+              <div class="btn js-form-button" data-type="signup">
+                Create an Account
+              </div>
+              <div class="btn js-form-button" data-type="login">
+                Login
+              </div>
             </div>
           <% end %>
         </div>
@@ -32,10 +76,10 @@
       <div class="controller">
         <div class="details">
           <div class="title">
-            <%= @stream["channel"]["status"] %>
+            Some title <%# @stream["channel"]["status"] %>
           </div>
           <div class="caster">
-            <%= @stream["channel"]["name"] %>
+            Some dude <%# @stream["channel"]["name"] %>
           </div>
         </div>
         <div class="channel-changer">
@@ -54,10 +98,30 @@
         </div>
       </div>
       <div class="tv js-ingamefame-tv">
-        <object style="width: 100%;height: 100%;" type="application/x-shockwave-flash" height="378" width="620" id="live_embed_player_flash" data="http://www.twitch.tv/widgets/live_embed_player.swf?channel=<%= @stream["channel"]["name"] %>" bgcolor="#000000"><param name="allowFullScreen" value="true" /><param name="allowScriptAccess" value="always" /><param name="allowNetworking" value="all" /><param name="movie" value="http://www.twitch.tv/widgets/live_embed_player.swf" /><param name="flashvars" value="hostname=www.twitch.tv&channel=<%= @stream["channel"]["name"] %>&auto_play=true&start_volume=25" /></object>
+        <div id="twitch_embed_player">
+        </div>
       </div>
     </div>
     <%= yield %>
   </div>
+  <script>
+    $(function () {
+      window.onPlayerLoad = function () {
+        var player = $("#twitch_embed_player")[0];
+        player.playVideo();
+        player.mute();
+        // setInterval(function() {
+        //   console.log(player.onlineStatus());
+        // }, 5000);
+      };
+      swfobject.embedSWF("//www-cdn.jtvnw.net/swflibs/TwitchPlayer.swf", "twitch_embed_player", "100%", "100%", "11", null,
+        { "initCallback":"onPlayerLoad",
+          "embed":1,
+          "channel":"superjova",
+          "auto_play":"true"},
+        { "allowScriptAccess":"always",
+          "allowFullScreen":"true"});
+    });
+  </script>
 </body>
 </html>

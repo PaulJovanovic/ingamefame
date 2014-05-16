@@ -1,7 +1,10 @@
 class CreateStreamersTable < ActiveRecord::Migration
   def up
     create_table :streamers do |t|
-      # twitch id for lookup
+      t.integer :twitch_id
+      t.string :name
+      t.integer :main_game_id
+      t.timestamps
     end
   end
 
